@@ -29,45 +29,49 @@ function TripBalanceViewModel() {
 
     self.total = ko.computed( function() {
         var t = 0;
-        for (var i =0; i < self.guys().length; i++)
-            t += parseInt(self.guys()[i].paid());
+        for (var i = 0; i < self.guys().length; i++)
+            t += parseFloat(self.guys()[i].paid());
         return t;
     }, this);
 
     self.calculate = function() {
+        self.results([]);
         var n = self.guys().length;
-        var total = parseInt(self.total());
+        var guys = self.guys();
+        var total = parseFloat(self.total());
 
-        // Setting the debts
-        for (var i = 0; i < n; i++)
-            self.guys()[i].debt( (total/n) - parseInt(self.guys()[i].paid()) );
+        var setDebts = function() {
+            // Setting the debts
+            for (var i = 0; i < n; i++)
+                guys[i].debt( -1 * ((total/n) - parseFloat(guys[i].paid())) );
+        };
 
+        var debtees = function() {
+            var debteesList = [];
+            for (var i = 0; i < n; i++)
+                if ( guys[i].debt() > 0 ) debteesList.push(guys[i]); 
+
+            return debteesList;
+        };
+
+
+        // Looping thru the guys
         for (var i = 0; i < n; i++) {
-            var guy = self.guys()[i];
+            setDebts();
+            var debteesList = debtees();
 
-            if (guy.debt() > 0){
-                for (var j=0; j<n; j++) {
-                    var currentGuy = self.guys()[j];
-                    // If it's not the guy him self
-                    if (guy !== currentGuy) {
-                        if (currentGuy.debt() < 0)
-                            if (guy.debt() > currentGuy.debt()) {
-                                // console.log(guy.name + " owns " + currentGuy.name + " " + ( guy.debt().toFixed(2) ) );
-                                self.results.push(guy.name + " owns " + currentGuy.name + " " + ( guy.debt().toFixed(2) ));
-                                guy.debt(0.0);
-                            }
-                    }
+            var guy = guys[i];
+            if ( guy.debt() < 0 ) {
+                for (var j = 0; j < debteesList.length; j++){
+                    self.results.push( guy.name + ' pays £' +
+                                     ( -1 * (guy.debt().toFixed(2) / debteesList.length)) +
+                                     " to " + debteesList[j].name );
                 }
+                guy.debt(0.0);
             }
         }
     };
 
-    self.resetResults = function() {
-        // for (var i=0; i<self.results().length; i++)
-        //     self.results().pop(); 
-        self.results([]);
-        console.log(self.results());
-    };
 }
 
 ko.applyBindings(new TripBalanceViewModel());
