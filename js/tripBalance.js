@@ -40,34 +40,38 @@ function TripBalanceViewModel() {
         var guys = self.guys();
         var total = parseFloat(self.total());
 
-        var setDebts = function() {
-            // Setting the debts
+        var updateDebts = function() {
             for (var i = 0; i < n; i++)
-                guys[i].debt( -1 * ((total/n) - parseFloat(guys[i].paid())) );
+                guys[i].debt(  ((total/n) - parseFloat(guys[i].paid())));
         };
 
-        var debtees = function() {
-            var debteesList = [];
-            for (var i = 0; i < n; i++)
-                if ( guys[i].debt() > 0 ) debteesList.push(guys[i]); 
-
-            return debteesList;
+        var checkDebts = function() {
+            for (var i = 0; i < n; i++) {
+                var guy = guys[i];
+                if (guy.debt() < 0)
+                    return guy;
+            }
         };
 
+        updateDebts();
 
-        // Looping thru the guys
-        for (var i = 0; i < n; i++) {
-            setDebts();
-            var debteesList = debtees();
-
+        for (var i = 0; i < n; i++){
             var guy = guys[i];
-            if ( guy.debt() < 0 ) {
-                for (var j = 0; j < debteesList.length; j++){
-                    self.results.push( guy.name + ' pays £' +
-                                     ( -1 * (guy.debt().toFixed(2) / debteesList.length)) +
-                                     " to " + debteesList[j].name );
+            while (guy.debt() > 0){
+                debtee = checkDebts();
+                if ( debtee ) {
+                    if ( guy !== debtee ) {
+                        var amount = 0;
+                        if ( guy.debt() <= (-1 * debtee.debt()) ) 
+                            amount = guy.debt();
+                        else
+                            amount = ( -1 * debtee.debt());
+
+                        self.results.push(guy.name + " gives " + amount.toFixed(2) + " to " + debtee.name );
+                        guy.debt( guy.debt() - amount);
+                        debtee.debt( debtee.debt() + amount);
+                    }
                 }
-                guy.debt(0.0);
             }
         }
     };
