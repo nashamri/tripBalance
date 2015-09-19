@@ -18,7 +18,7 @@
     <div class="container">
 
         <div class="row">
-            <h1 class="text-center">Trip Balance</h1>
+            <h1 class="text-center">&#10084;</h1>
             <div class="col-xs-12">
                 <table class="table table-bordered table-hover" data-bind="foreach: guys">
                     <tr>
@@ -28,13 +28,13 @@
                     </tr>
                 </table>
 
-                <h4 class="text-center">Total: <span data-bind="text: total"></span></h4>
+                <h4 class="text-center">المجموع: <span data-bind="text: total"></span></h4>
                 <div class="well-sm">
                     <div class="col-xs-8 text-center">
-                        <input data-bind="value: newGuyName" class="form-control" placeholder="Add another guy"/>
+                        <input data-bind="value: newGuyName" class="form-control" placeholder="أضف شخصا آخر"/>
                     </div><!-- col-xs-6 -->
                     <div class="col-xs-4 text-center">
-                        <button class="btn btn-block" data-bind="click: addGuy">Add</button>
+                        <button class="btn btn-block" data-bind="click: addGuy">أضف</button>
                     </div><!-- col-xs-2 -->
                 </div><!-- well-sm -->
             </div><!-- col-xs-12 -->
@@ -43,7 +43,7 @@
 
         <div class="col-xs-12">
             <div class="well-sm">
-                <button class="btn btn-primary btn-lg btn-block" data-bind="click: calculate" data-toggle="modal" data-target="#myModal">Calculate</button>
+                <button class="btn btn-primary btn-lg btn-block" data-bind="click: calculate" data-toggle="modal" data-target="#myModal">احسب</button>
             </div>
         </div><!-- row -->
 
@@ -77,6 +77,6 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
     <!-- Trip Balance App -->
-    <script type='text/javascript' src="js/tripBalance.js"></script>
+    <script type='text/javascript' src="js/tripBalance.js" charset="UTF-8"></script>
 </body>
 </html>
