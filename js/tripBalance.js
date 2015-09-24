@@ -12,15 +12,6 @@ function TripBalanceViewModel() {
     var self = this;
 
     self.guys = ko.observableArray([
-        new Guy("أبو باسل"),
-        new Guy("أبو بندر"),
-        new Guy("أبو سرهيد"),
-        new Guy("أبو صلوح"),
-        new Guy("أبو عبدالعزيز"),
-        new Guy("أبو عوض"),
-        new Guy("أبو عويد"),
-        new Guy("أبو غسان"),
-        new Guy("أبو نواف")
     ]);
 
     self.newGuyName = "";
@@ -57,6 +48,7 @@ function TripBalanceViewModel() {
                 if (guy.debt() < 0)
                     return guy;
             }
+	    return null;
         };
 
         updateDebts();
@@ -64,20 +56,22 @@ function TripBalanceViewModel() {
         for (var i = 0; i < n; i++){
             var guy = guys[i];
             while (guy.debt() > 0){
-                debtee = checkDebts();
+                var debtee = checkDebts();
                 if ( debtee ) {
                     if ( guy !== debtee ) {
                         var amount = 0;
-                        if ( guy.debt() <= (-1 * debtee.debt()) ) 
+                        if ( guy.debt() <= (-1) * debtee.debt() ) 
                             amount = guy.debt();
                         else
-                            amount = ( -1 * debtee.debt());
+                            amount = (-1) * debtee.debt();
 
                         self.results.push(guy.name + " يعطي " + amount.toFixed(2) + " لـ " + debtee.name );
                         guy.debt( guy.debt() - amount);
                         debtee.debt( debtee.debt() + amount);
                     }
-                }
+                } else {
+			break;
+		}
             }
         }
     };
